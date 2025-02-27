@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+sqlalchemy
+python-dotenv
+tensorflow 
+tensorflow-hub 
+tensorflow-text 
+numpy
