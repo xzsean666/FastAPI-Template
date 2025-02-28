@@ -6,8 +6,22 @@ from slowapi.errors import RateLimitExceeded
 
 from helper.limiter import limiter
 from routers import api
+from settings import PORT
 
-app = FastAPI()
+app = FastAPI(
+    title="AI API",
+    description="多个AI服务的接口",
+    version="1.0.0",
+    docs_url="/docs",  # Swagger UI 地址
+    redoc_url="/redoc",  # ReDoc 文档地址
+    openapi_url="/openapi.json",  # OpenAPI 规范地址
+    openapi_tags=[
+        {
+            "name": "sentence",
+            "description": "多个AI服务的接口",
+        }
+    ],
+)
 
 app.include_router(api.router)
 
@@ -32,4 +46,4 @@ async def example(request: Request):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=PORT)

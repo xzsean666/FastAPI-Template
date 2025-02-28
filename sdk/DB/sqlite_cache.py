@@ -2,14 +2,14 @@ import functools
 import inspect
 import json
 import time
-from typing import Any, Callable, Optional, TypeVar, cast
+from typing import Any, Callable, Optional, TypeVar
 
-from .db_sqlite import KVDatabase
+from .db_sqlite import KVDB
 
 T = TypeVar("T")
 
 
-def create_cache_decorator(db: KVDatabase, default_ttl: int = 60 * 1000):
+def create_cache_decorator(db: KVDB, default_ttl: int = 60 * 1000):
     """
     创建一个缓存装饰器工厂函数
 
@@ -53,8 +53,12 @@ def create_cache_decorator(db: KVDatabase, default_ttl: int = 60 * 1000):
                     else:
                         result = func(*args, **kwargs)
 
-                    # 缓存结果
-                    await db.put(cache_key, {"value": result, "timestamp": now})
+                    # 缓存结果 - 直接存储结果，不使用pickle
+                    try:
+                        # 由于 get_similarity 返回的是浮点数，可以直接存储
+                        await db.put(cache_key, {"value": result, "timestamp": now})
+                    except Exception as e:
+                        print(f"缓存操作失败: {str(e)}")
 
                     return result
 

@@ -9,13 +9,14 @@ class SentenceCompareInput(BaseModel, Generic[T]):
     """Base response model for API endpoints"""
 
     base_sentence: str
+    compare_sentences: List[str]
 
 
 class CompareResult(BaseModel):
     """Model for a single comparison result"""
 
     sentence: str
-    result: str
+    result: float
 
 
 class SentenceCompareResponse(BaseModel):
